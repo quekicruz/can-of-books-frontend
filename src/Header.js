@@ -4,7 +4,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from "react-router-dom";
 import './Header.css';
 import LogoutButton from './LogoutButton';
-import LoginButton from './LoginButton';
+import Login from './Login'
+import {withAuth0} from '@auth0/auth0-react'
 
 class Header extends React.Component {
   render() {
@@ -13,12 +14,11 @@ class Header extends React.Component {
         <Navbar.Brand>My Favorite Books</Navbar.Brand>
         <Link to="/">Home</Link>
         <Link to="/profile">Profile</Link>
-        <LogoutButton /> ? <div><LogoutButton/></div>: null;
-        <LoginButton />
+        {this.props.auth0.isAuthenticated ? <LogoutButton/> : <Login/>}
         {/* TODO: if the user is logged in, render the `LogoutButton` - if the user is logged out, render the `LoginButton` */}
       </Navbar>
     );
   }
 }
 
-export default Header;
+export default withAuth0(Header);
