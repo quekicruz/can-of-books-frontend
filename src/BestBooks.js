@@ -4,6 +4,8 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import './BestBooks.css';
 import axios from 'axios'
 import { withAuth0 } from '@auth0/auth0-react';
+import BookFormModal from './BookFormModal';
+// import BookDisplay from './BookDisplay';
 
 
 class MyFavoriteBooks extends React.Component {
@@ -11,7 +13,10 @@ class MyFavoriteBooks extends React.Component {
     super();
     this.state = {
       search: ' ',
-      books: 0,
+      name: '',
+      description: ' ',
+      status: ' ',
+      newbook: {},
     }
   }
 
@@ -36,18 +41,54 @@ class MyFavoriteBooks extends React.Component {
     }
   }
 
-  retrieveBookData = async () => {
-    let bookResponse = await axios.get('http://localhost:3000/books');
-    this.setState({books: bookResponse}, () => console.log(bookResponse))
+
+  addBookData = async () => {
+    this.props.auth0.getIdTokenClaims()
+      .then(tokenData => {
+        const jwt = tokenData.__raw;
+        const requestConfig = {
+          headers: { "Authorization": `Bearer ${jwt}` },
+          method: 'post',
+          baseURL: process.env.REACT_APP_SERVER,
+          url: '/books',
+        }
+        axios(requestConfig)
+          .then(response => {
+            // console.log(response.data)
+            this.setState({ books: response.data }, () => console.log(response.data));
+          })
+          .catch(err => console.error(err));
+      })
   }
+
+  newBookName = (e) => this.setState({name: e.target.value});
+  newBookDescription = (e) => this.setState({description: e.target.value})
+  newBookStatus = (e) => this.setState({status: e.target.value })
+
+  addANewBook = async (e) => {
+    e.prevenDefault();
+
+    const bodyData = {
+      name: this.state.name,
+      description: this.state.description,
+      status: this.state.status, 
+    }
+    let bookResponse = await axios.get('http://localhost:3000/books', bodyData);
+
+    this.setState({newbook: bookResponse.data})
+  }
+
 
   render() {
     return(
       <Jumbotron>
         <h1>My Favorite Books</h1>
-        <p>
-          This is a collection of my favorite books
-        </p>
+        <BookFormModal
+        newBookName={this.newBookName} 
+        newBookDescription={this.newBookDescription}
+        newBookStatus={this.newBookStatus}
+        />
+        {/* <BookDisplay /> */}
       </Jumbotron>
     )
   }
