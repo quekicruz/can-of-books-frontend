@@ -1,6 +1,9 @@
 import React from 'react'
 import {withAuth0} from '@auth0/auth0-react';
 import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './Login.css';
+
 
 class Profile extends React.Component{
 
