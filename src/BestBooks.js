@@ -33,7 +33,7 @@ class MyFavoriteBooks extends React.Component {
         const jwt = res.__raw;
 
         const config = {
-          header: {"Authorization" : `Bearer ${jwt}`},
+          headers: {"Authorization" : `Bearer ${jwt}`},
           method: 'get',
           baseURL: process.env.REACT_APP_SERVER,
           url: '/books'
@@ -74,7 +74,7 @@ class MyFavoriteBooks extends React.Component {
     const bookTitle = this.state.deleteBook;
     let indexHere;
     for (let i = 0; i < this.state.books.length; i++) {
-      if (bookTitle === this.state.books[i].title) {
+      if (bookTitle === this.state.books[i].name) {
         indexHere = i;
       }
     }
@@ -84,7 +84,8 @@ class MyFavoriteBooks extends React.Component {
         const requestConfig = {
           headers: { "Authorization": `Bearer ${jwt}` },
           method: 'delete',
-          baseURL: process.env.REACT_APP_SERVER_URL || 'http://localhost:3001',
+          baseURL: process.env.REACT_APP_SERVER,
+          // || 'http://localhost:3001',
           url: `/books/${indexHere}`
         }
         axios(requestConfig)

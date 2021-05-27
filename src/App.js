@@ -26,7 +26,7 @@ class App extends React.Component {
           header: {"Authorization" : `Bearer ${jwt}`},
           method: 'get',
           baseURL: process.env.REACT_APP_SERVER,
-          url: '/Profile'
+          url: '/books'
         }
         axios(config)
           .then(axiosResults => console.log(axiosResults.data))
@@ -49,7 +49,7 @@ class App extends React.Component {
                 {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
                 {this.props.auth0.isAuthenticated ? <BestBooks />: null }
               </Route>
-              <Route exact path="/Profile">
+              <Route exact path="/books">
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
               {this.props.auth0.isAuthenticated ?  <Profile userInfo={user}/>: null }
               {/* <LogoutButton /> */}
