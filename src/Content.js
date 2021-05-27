@@ -15,7 +15,7 @@ class Content extends React.Component {
             headers: { "Authorization": `Bearer ${jwt}` },
             method: 'get',
             baseURL: process.env.REACT_APP_SERVER || 'http://localhost:3000',
-            url: '/test'
+            url: '/books'
           }
           axios(requestConfig)
             .then(response => {

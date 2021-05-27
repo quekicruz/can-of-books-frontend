@@ -7,7 +7,7 @@ class BookFormModal extends React.Component{
   render(){
     return(
       <div>
-        <Form onSubmit={(e) => this.props.addBook(e)}>
+        <Form >
           <Form.Group>
             <Form.Label>Title Of Book </Form.Label>
             <Form.Control type="text" onChange={this.props.newBookName}/>
@@ -24,7 +24,7 @@ class BookFormModal extends React.Component{
             <Form.Control type="text" onChange={this.props.newBookStatus}/>
           </Form.Group>
 
-          <Button type="submit">Add New Book</Button>
+          <Button onSubmit={(e) => this.props.addBook(e)} type="submit">Add New Book</Button>
         </Form>
       </div>
   
