@@ -22,6 +22,10 @@ class MyFavoriteBooks extends React.Component {
       status: ' ',
       deleteBook: ' ',
       books: 0,
+      updatedBook: ' ',
+      newName: ' ',
+      newDescription: ' ',
+      newStatus: ' ',
     }
   }
 
@@ -85,7 +89,6 @@ class MyFavoriteBooks extends React.Component {
           headers: { "Authorization": `Bearer ${jwt}` },
           method: 'delete',
           baseURL: process.env.REACT_APP_SERVER,
-          // || 'http://localhost:3001',
           url: `/books/${indexHere}`
         }
         axios(requestConfig)
@@ -97,21 +100,19 @@ class MyFavoriteBooks extends React.Component {
   }
 
   updateBook = async () => {
-    const bookTitle = this.state.deleteBook;
+    const updatedBookEntry = this.state.deleteBook;
     let indexHere;
-    for (let i = 0; i < this.state.books.length; i++) {
-      if (bookTitle === this.state.books[i].title) {
-        indexHere = i;
-      }
+    if(updatedBookEntry < this.state.books.length) {
+      indexHere = updatedBookEntry
     }
     this.props.auth0.getIdTokenClaims()
       .then(tokenData => {
         const jwt = tokenData.__raw;
         const requestConfig = {
           headers: { "Authorization": `Bearer ${jwt}` },
-          method: 'delete',
-          baseURL: process.env.REACT_APP_SERVER_URL || 'http://localhost:3001',
-          url: `/books/${indexHere}`
+          method: 'put',
+          baseURL: process.env.REACT_APP_SERVER,
+          url: `/books/${indexHere}?updateName=${this.state.newName}&updateDescription=${this.state.newDescription}&updateStatus=${this.state.newStatus}`,
         }
         axios(requestConfig)
           .then(response => {
@@ -125,6 +126,10 @@ class MyFavoriteBooks extends React.Component {
   newBookDescription = (e) => {this.setState({description: e.target.value})}
   newBookStatus = (e) => {this.setState({status: e.target.value })}
   newDelete = (e) => {this.setState({deleteBook: e.target.value})}
+  updatedNameOfBook = (e) => {this.setState({newName: e.target.value})}
+  updatedBookDescription = (e) => {this.setState({newDescription: e.target.value})}
+  updatedBookStatus = (e) => {this.setState({newStatus: e.target.value})}
+  // newUpdate = (e) => {this.setState({updatedBook: e.target.value})}
 
   
   
@@ -158,6 +163,16 @@ class MyFavoriteBooks extends React.Component {
           <Form.Control placeholder="Status Of Book" onChange={this.newBookStatus}></Form.Control>
           <Button onClick={this.addBookData}>Add Book</Button>
           </FormGroup>
+
+          <FormGroup>
+          <FormLabel> <h4>Update A Book</h4> </FormLabel>
+          <Form.Control placeholder="Update Book Name" onChange={this.updatedNameOfBook}></Form.Control>
+          <Form.Control placeholder="Update Book Description" onChange={this.updatedBookDescription}></Form.Control>
+          <Form.Control placeholder="Update Book Status" onChange={this.updatedBookStatus}></Form.Control>
+          <Button onClick={this.updateBook}>Update Specific Book </Button>
+          </FormGroup>
+
+          
           <FormGroup>
             <FormLabel> <h4>Remove A Book</h4> </FormLabel>
           <Form.Control placeholder="Book Title to delete" onChange={this.newDelete}></Form.Control>
